@@ -787,7 +787,8 @@ if(localStorage.getItem(k)===d)return;localStorage.setItem(k,d);}catch(e){}
 var i=new Image();i.referrerPolicy="no-referrer";i.src="https://hits.sh/campnpogo.github.io/pogo-schedule.svg";})();
 </script>
 <style>
-#pwa-chip{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:50;display:none;align-items:center;gap:10px;max-width:calc(100vw - 32px);padding:10px 10px 10px 14px;background:var(--card);color:var(--fg);border:1px solid var(--line);border-radius:14px;box-shadow:0 8px 28px rgba(0,0,0,.18);font-size:14px;line-height:1.4}
+#pwa-chip{position:fixed;left:16px;right:16px;bottom:calc(16px + env(safe-area-inset-bottom));margin:0 auto;z-index:50;display:none;align-items:center;gap:10px;max-width:440px;padding:10px 10px 10px 14px;background:var(--card);color:var(--fg);border:1px solid var(--line);border-radius:14px;box-shadow:0 8px 28px rgba(0,0,0,.18);font-size:14px;line-height:1.4}
+#pwa-chip [hidden]{display:none!important}
 #pwa-chip img{width:36px;height:36px;border-radius:9px;flex:none}
 #pwa-chip .t{flex:1;min-width:0}
 #pwa-chip button{font:inherit;border:0;border-radius:10px;cursor:pointer}
