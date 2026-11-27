@@ -262,7 +262,7 @@ const T = s => new Date(s + "+09:00");
 
 // 주간 로테이션 (수 06:00 ~ 다음 주 화 22:00)
 const WEEKS = [
-  { s:"2026-11-25T06:00", e:"2026-12-01T22:00", legend:"테오키스", lk:"deoxys", legendNote:"노말·어택·디펜스·스피드폼", mega:"메가메타그로스", mk:"mega-metagross", rh:null, max:["11/30","다이맥스 프리지오"] },
+  { s:"2026-11-25T06:00", e:"2026-12-01T22:00", legend:"테오키스", lk:"deoxys", legendNote:"노말·어택·디펜스·스피드폼", mega:"메가메타그로스", mk:"mega-metagross", ms:"2026-11-30T20:00", megaNote:"11/30(월) 20:00 황혼의 소원 종료 후부터 · 그 전엔 황혼의 소원 메가 4종", rh:null, max:["11/30","다이맥스 프리지오"] },
   { s:"2026-12-02T06:00", e:"2026-12-08T22:00", legend:"레지드래고", lk:"regidrago", mega:"메가야도란", mk:"mega-slowbro", rh:"레지드래고", max:["12/7","다이맥스 모노두"] },
   { s:"2026-12-09T06:00", e:"2026-12-15T22:00", legend:"챔피언스 콜라보 전설 8종", legendNote:"라티아스·라티오스·히드런·코바르온·테라키온·비리디온·레지에레키·레지드래고 (스페셜 배경)", mega:"메가팬텀", rh:"미발표", max:["12/14","다이맥스 이브이"] },
   { s:"2026-12-16T06:00", e:"2026-12-22T22:00", legend:"칠색조", mega:"메가무장조", rh:"칠색조", max:["12/21","다이맥스 알로라 모래두지"] },
@@ -277,6 +277,7 @@ const SHADOW = [
 // 날짜별 일정
 const EVENTS = [
   { k:"event", info:"twilight-wishes", name:"황혼의 소원 이벤트", s:"2026-11-24T10:00", e:"2026-11-30T20:00" },
+  { k:"mega", info:"twilight-wishes", name:"황혼의 소원 메가 레이드 4종", s:"2026-11-24T10:00", e:"2026-11-30T20:00", note:"메가독침붕 · 메가헬가 · 메가깜까미 · 메가썬더볼트" },
   { k:"mega", hl:true, info:"clefable-day", boss:"mega-clefable", name:"메가픽시 슈퍼 메가 레이드 데이", s:"2026-11-28T14:00", e:"2026-11-28T17:00" },
   { k:"event", info:"tropical-paradise", boss:"mega-slowbro", name:"열대낙원 이벤트", s:"2026-12-01T10:00", e:"2026-12-07T20:00" },
   { k:"event", info:"go-pass-dec", name:"12월 GO패스", s:"2026-12-01T10:00", e:"2027-01-05T10:00" },
@@ -318,7 +319,7 @@ function allItems(){
   const out = EVENTS.map(e => ({...e, S:T(e.s), E:T(e.e)}));
   WEEKS.forEach(w => {
     out.push({k:"legend", name:w.legend + " 레이드", boss:w.lk, S:T(w.s), E:T(w.e), rot:true});
-    out.push({k:"mega", name:w.mega + " 레이드", boss:w.mk, S:T(w.s), E:T(w.e), rot:true});
+    out.push({k:"mega", name:w.mega + " 레이드", boss:w.mk, S:T(w.ms||w.s), E:T(w.e), rot:true});
   });
   SHADOW.forEach(s => out.push({k:"shadow", name:s.name + " 레이드", boss:s.key, S:T(s.s), E:T(s.e), rot:true}));
   return out;
@@ -350,7 +351,7 @@ function renderWeeks(){
       <div class="wdate">${cur?`<span class="cur-tag">이번 주</span>`:""}<span class="d">${md(S)}</span><span class="arrow">→ ${md(E)}</span></div>
       <div class="wrows">
         <div class="wr">${pill("legend")}<div class="v"><b>${bossName(w.legend, w.lk)}</b>${w.legendNote?`<br><small>${esc(w.legendNote)}</small>`:""}</div></div>
-        <div class="wr">${pill("mega")}<div class="v"><b>${bossName(w.mega, w.mk)}</b></div></div>
+        <div class="wr">${pill("mega")}<div class="v"><b>${bossName(w.mega, w.mk)}</b>${w.megaNote?`<br><small>${esc(w.megaNote)}</small>`:""}</div></div>
         <div class="wr">${pill("raidhour")}<div class="v">${w.rh?`${md(S)} 18:00 · ${esc(w.rh)}`:"<small>지남</small>"}</div></div>
         <div class="wr">${pill("max")}<div class="v">${w.max?`${w.max[0]}(월) 맥스 먼데이 · ${esc(w.max[1])}`:"<small>미발표</small>"}</div></div>
       </div></div>`;
@@ -421,7 +422,7 @@ const BOSS = {
       ["이벨타르","yveltal",["악","비행"],"바크아웃 + 악의파동"] ],
     cnote:"메가는 한 마리만 데려가요. 메가샹델라는 메가진화하면 쓰는 전용 기술 <b>괴상한바람+</b>로 고스트 1위예요. 삼삼드래·마기라스는 그림자면 비메가 1·2위, 일반 개체도 다크라이·팬텀과 비슷하고 더 오래 버텨요. "+MV_NOTE },
 
-  "mega-metagross": { name:"메가메타그로스", tag:"메가 레이드", period:"11/25(수) 06:00 ~ 12/1(화) 22:00", sub:"잡히는 건 일반 메타그로스 · ✨ 이로치 가능", types:["강철","에스퍼"],
+  "mega-metagross": { name:"메가메타그로스", tag:"메가 레이드", period:"11/30(월) 20:00 ~ 12/1(화) 22:00", sub:"황혼의 소원이 끝난 뒤부터 등장 (스코플리 공식 X 11/26) · 잡히는 건 일반 메타그로스 · ✨ 이로치 가능", types:["강철","에스퍼"],
     weak:[["땅","×1.6"],["고스트","×1.6"],["불꽃","×1.6"],["악","×1.6"]],
     res:[["독","×0.39"],["에스퍼","×0.39"],["노말","×0.625"],["비행","×0.625"],["바위","×0.625"],["강철","×0.625"],["풀","×0.625"],["얼음","×0.625"],["드래곤","×0.625"],["페어리","×0.625"]],
     forms:[{ sprite:"metagross-mega", stats:[300,289,190],
@@ -464,7 +465,7 @@ const BOSS = {
       grad:[["레이드","애교부리기 + 문포스","매지컬샤인도 비슷"],["GO배틀리그","요정의바람 + 문포스","또는 코멧펀치"],["메가진화 시","문포스+ 추가","레이드 위력 160 · 메가 전용"]],
       note:"메가진화하면 비행 타입이 붙어서 <b>땅이 안 통하고</b> 격투·벌레·드래곤이 ×0.39가 돼요. 약점 5개가 전부 ×1.6이고 이중약점은 없어요." }],
     counters:[
-      ["메가메타그로스","metagross-mega",["강철","에스퍼"],"불릿펀치 + 코멧펀치* (또는 러스터캐논)"],
+      ["메가메타그로스 (메가진화 해둔 분만)","metagross-mega",["강철","에스퍼"],"불릿펀치 + 코멧펀치* (또는 러스터캐논)"],
       ["메가라이츄Y","raichu-mega-y",["전기"],"전기쇼크 + 와일드볼트"],
       ["메가독침붕","beedrill-mega",["벌레","독"],"독찌르기 + 오물폭탄"],
       ["메가프테라","aerodactyl-mega",["바위","비행"],"돌떨구기 + 스톤샤워"],
@@ -474,7 +475,7 @@ const BOSS = {
       ["화이트큐레무","kyurem-white",["드래곤","얼음"],"얼음엄니 + 콜드플레어"],
       ["자포코일","magnezone",["전기","강철"],"볼트체인지 + 와일드볼트"],
       ["에레키블","electivire",["전기"],"전기쇼크 + 와일드볼트"] ],
-    cnote:"슈퍼 메가 레이드는 <b>메가가 꼭 한 마리 필요</b>해서 1~5위를 메가로 채웠어요. 메가메타그로스는 11/25~12/1 메가 레이드로 나와요. "+MV_NOTE },
+    cnote:"슈퍼 메가 레이드는 <b>메가가 꼭 한 마리 필요</b>해서 1~5위를 메가로 채웠어요. 메가메타그로스 메가 레이드는 <b>11/30(월) 20:00부터</b>라 이번 메가픽시 데이 전에는 에너지를 모을 수 없어요. 예전에 메가진화시켜 둔 분만 쓰시고, 없으면 2위부터 보세요. "+MV_NOTE },
 
   "gmax-inteleon": { name:"거다이맥스 인텔리레온", tag:"맥스배틀 데이 · 별6", period:"12/5(토) 14:00 ~ 17:00", sub:"2025년 6월 이후 첫 재등장 · 이로치 첫 등장", types:["물"],
     weak:[["전기","×1.6"],["풀","×1.6"]], res:[["불꽃","×0.625"],["얼음","×0.625"],["강철","×0.625"],["물","×0.625"]],
@@ -557,7 +558,7 @@ const INFO = {
                   "보스가 실드를 쳐요. 메가진화 포켓몬 공격으로만 깨지고, 한 사람당 실드 1개",
                   "그래서 <b>참가자 모두 메가 1마리</b>가 필요해요. 8명 정도 권장"]] ],
     tips:["한 판에 메가에너지 평균 400개 정도라 20판쯤 돌면 슈퍼 맥스까지 가요.",
-          "메가메타그로스(11/25~12/1)를 미리 돌아 에너지를 모아두면 실드 깨기와 딜을 한 번에 맡길 수 있어요.",
+          "메가메타그로스 메가 레이드는 11/30(월) 20:00부터라 이번엔 미리 모을 수 없어요. 황혼의 소원 메가 레이드(~11/30)에서 메가독침붕·메가썬더볼트 에너지를 모아두면 실드 깨기에 쓸 수 있어요.",
           "단톡방에서 미리 8명 정도 모으세요."] },
 
   "tropical-paradise": { name:"열대낙원", tag:"이벤트", period:"12/1(화) 10:00 ~ 12/7(월) 20:00", boss:"mega-slowbro",
