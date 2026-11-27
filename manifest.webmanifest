@@ -1,0 +1,16 @@
+{
+  "name": "포고 일정표",
+  "short_name": "포고 일정표",
+  "description": "포켓몬고 레이드·맥스배틀·커뮤니티데이·이벤트 일정과 카운터 (한국시간)",
+  "lang": "ko",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#F7F5F0",
+  "theme_color": "#F7F5F0",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

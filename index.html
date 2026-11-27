@@ -3,6 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="theme-color" content="#F7F5F0" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#191713" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="포고 일정표">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="description" content="포켓몬고 레이드·맥스배틀·커뮤니티데이·이벤트 일정과 보스별 약점·카운터 (한국시간)">
 <title>포고 일정표</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Noto+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@500&display=swap">
@@ -775,5 +785,35 @@ setInterval(renderAll, 60000);
 (function(){try{var d=new Date(Date.now()+9*3600e3).toISOString().slice(0,10),k="pogo-hit-day";
 if(localStorage.getItem(k)===d)return;localStorage.setItem(k,d);}catch(e){}
 var i=new Image();i.referrerPolicy="no-referrer";i.src="https://hits.sh/campnpogo.github.io/pogo-schedule.svg";})();
+</script>
+<style>
+#pwa-chip{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:50;display:none;align-items:center;gap:10px;max-width:calc(100vw - 32px);padding:10px 10px 10px 14px;background:var(--card);color:var(--fg);border:1px solid var(--line);border-radius:14px;box-shadow:0 8px 28px rgba(0,0,0,.18);font-size:14px;line-height:1.4}
+#pwa-chip img{width:36px;height:36px;border-radius:9px;flex:none}
+#pwa-chip .t{flex:1;min-width:0}
+#pwa-chip button{font:inherit;border:0;border-radius:10px;cursor:pointer}
+#pwa-chip .go{background:var(--accent);color:#fff;padding:8px 12px;font-weight:700;white-space:nowrap}
+#pwa-chip .x{background:transparent;color:var(--muted);padding:6px 8px;font-size:18px;line-height:1}
+</style>
+<div id="pwa-chip" role="dialog" aria-label="앱으로 설치"><img src="icon-192.png" alt=""><div class="t" id="pwa-t"></div><button class="go" id="pwa-go" hidden>설치</button><button class="x" id="pwa-x" aria-label="닫기">×</button></div>
+<script>
+(function(){
+  if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(function(){});
+  var standalone = matchMedia("(display-mode: standalone)").matches || navigator.standalone;
+  if (standalone) return;
+  var K = "pogo-install-dismissed", chip = document.getElementById("pwa-chip"), t = document.getElementById("pwa-t"), go = document.getElementById("pwa-go");
+  function dismissed(){ try { return Number(localStorage.getItem(K)||0) > Date.now(); } catch(e){ return false; } }
+  function show(html){ if (dismissed()) return; t.innerHTML = html; chip.style.display = "flex"; }
+  document.getElementById("pwa-x").onclick = function(){ chip.style.display = "none"; try { localStorage.setItem(K, Date.now() + 14*864e5); } catch(e){} };
+  var deferred;
+  addEventListener("beforeinstallprompt", function(e){ e.preventDefault(); deferred = e; go.hidden = false; show("<b>포고 일정표</b>를 앱으로 설치할 수 있어요"); });
+  go.onclick = function(){ if (!deferred) return; deferred.prompt(); deferred.userChoice.finally(function(){ deferred = null; chip.style.display = "none"; }); };
+  addEventListener("appinstalled", function(){ chip.style.display = "none"; });
+  var ua0 = navigator.userAgent;
+  if (/Android/.test(ua0) && /KAKAOTALK|NAVER|Instagram|FBAN/.test(ua0)) setTimeout(function(){ show("오른쪽 위 메뉴 → <b>다른 브라우저로 열기</b>(크롬)를 누르면 앱으로 설치할 수 있어요"); }, 1500);
+  var ua = navigator.userAgent, ios = /iPhone|iPad|iPod/.test(ua) || (ua.includes("Mac") && "ontouchend" in document);
+  if (ios) setTimeout(function(){ show(/CriOS|FxiOS|KAKAOTALK|NAVER/.test(ua)
+      ? "사파리로 열면 <b>홈 화면에 추가</b>해서 앱처럼 쓸 수 있어요"
+      : "아래 <b>공유</b> 버튼 → <b>홈 화면에 추가</b>를 누르면 앱처럼 쓸 수 있어요"); }, 1500);
+})();
 </script>
 </html>
